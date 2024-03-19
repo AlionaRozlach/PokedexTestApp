@@ -1,0 +1,15 @@
+buildscript {
+    repositories {
+        // Add repositories here if necessary
+        google()  // This is usually required for Dagger Hilt
+        // Other repositories
+    }
+    dependencies {
+        // Add Dagger Hilt plugin dependency here
+        classpath "com.google.dagger:hilt-android-gradle-plugin:2.48" // Example version
+    }
+}// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+alias(libs.plugins.androidApplication) apply false
+    alias(libs.plugins.jetbrainsKotlinAndroid) apply false
+}
