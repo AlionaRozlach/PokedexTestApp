@@ -5,9 +5,9 @@ data class PokemonDetailModel (
     val name: String,
     val height: Int,
     val weight: Int,
-    val hp: Int,
-    val attack: Int,
-    val defense: Int,
-    val speed: Int,
-    val types: String
+//    val hp: Int,
+//    val attack: Int,
+//    val defense: Int,
+//    val speed: Int,
+//    val types: String
 )

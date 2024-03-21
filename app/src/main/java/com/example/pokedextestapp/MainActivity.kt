@@ -17,7 +17,7 @@ import com.example.pokedextestapp.ui.theme.PokedexTestAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import entity.pokemon.Pokemon
 import androidx.compose.runtime.*
-import com.example.pokedextestapp.presentation.pokemons_list.NavGraphs
+import com.example.pokedextestapp.presentation.NavGraphs
 import com.ramcosta.composedestinations.DestinationsNavHost
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

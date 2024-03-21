@@ -13,17 +13,4 @@ data class PokemonDetailDto(
     val speed: Int,
     val types: String
 ) {
-    fun toPokemonDetailModel(): PokemonDetailModel {
-        return PokemonDetailModel(
-            id = id,
-            name = name,
-            height = height,
-            weight = weight,
-            hp = hp,
-            attack = attack,
-            defense = defense,
-            speed = speed,
-            types = types
-        )
-    }
 }

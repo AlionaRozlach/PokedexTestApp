@@ -1,5 +1,6 @@
 package com.example.pokedextestapp.presentation.pokemons_list
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.runtime.collectAsState
 import com.example.pokedextestapp.domain.model.PokemonModel
+import com.example.pokedextestapp.presentation.destinations.PokemonDetailScreenDestination
+import com.example.pokedextestapp.presentation.pokemon_info.PokemonDetailScreen
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -33,7 +36,13 @@ fun PokemonsListScreen(navigator: DestinationsNavigator,
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
 
-        PokemonList()
+        PokemonList(
+            onItemClick = { pokemon ->
+                navigator.navigate(
+                    PokemonDetailScreenDestination(name = pokemon.pokemonName)
+                )
+            }
+        )
         if (state.error.isNotBlank()) {
             Text(
                 text = state.error,
@@ -52,11 +61,13 @@ fun PokemonsListScreen(navigator: DestinationsNavigator,
 
 
 @Composable
-fun PokemonItem(pokemon: PokemonModel) {
+fun PokemonItem(pokemon: PokemonModel,
+                onItemClick: (PokemonModel) -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .clickable { onItemClick(pokemon) }
     ) {
         Column(
             modifier = Modifier.padding(8.dp)
@@ -99,7 +110,8 @@ fun ErrorView(error: String) {
 }
 @Composable
 fun PokemonList(
-    viewModel: PokemonsListViewModel = hiltViewModel()
+    viewModel: PokemonsListViewModel = hiltViewModel(),
+    onItemClick: (PokemonModel) -> Unit
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -120,7 +132,7 @@ fun PokemonList(
         // Show the list of pokemons in a grid with two columns
         LazyVerticalGrid(columns = GridCells.Fixed(2)) {
             items(state.items.size) { index ->
-                PokemonItem(state.items[index])
+                PokemonItem(state.items[index],onItemClick)
                 // Load more pokemons if we're near the end of the list
                 if (index == state.items.size - 1 && !state.isLoading && !state.endReached) {
                     onLoadMore()
