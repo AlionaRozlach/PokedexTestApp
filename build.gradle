@@ -2,11 +2,14 @@ buildscript {
     repositories {
         // Add repositories here if necessary
         google()  // This is usually required for Dagger Hilt
-        // Other repositories
+        mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         // Add Dagger Hilt plugin dependency here
-        classpath "com.google.dagger:hilt-android-gradle-plugin:2.48" // Example version
+        classpath "com.google.dagger:hilt-android-gradle-plugin:2.48.1"
+        classpath "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.9.22-1.0.16"
+// Example version
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
