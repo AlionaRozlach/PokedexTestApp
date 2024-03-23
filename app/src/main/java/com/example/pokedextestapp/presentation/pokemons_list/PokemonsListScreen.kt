@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -62,7 +63,7 @@ fun PokemonsListScreen(
                 modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 20.dp)
             )
 
-            Box(modifier = Modifier.padding(top= 40.dp)) {
+            Box(modifier = Modifier.padding(top = 40.dp)) {
                 PokemonList(
                     onItemClick = { pokemon ->
                         navigator.navigate(
@@ -106,7 +107,10 @@ fun CustomBackgroundColumn() {
             modifier = Modifier
                 .size(300.dp) // Adjust size as needed
                 .align(Alignment.TopEnd)
-                .offset(90.dp, (-70).dp), // Aligns the image to the top right corner , // Adjust padding as needed
+                .offset(
+                    90.dp,
+                    (-70).dp
+                ), // Aligns the image to the top right corner , // Adjust padding as needed
             contentScale = ContentScale.Crop // Adjust content scale as needed
         )
     }
@@ -122,8 +126,7 @@ fun PokemonItem(
         pokemonNumber = pokemon.number,
         pokemonName = pokemon.pokemonName,
         url = pokemon.url,
-        typeList = pokemon.type
-        , onItemClick = onItemClick
+        typeList = pokemon.type, onItemClick = onItemClick
     ) {}
 }
 
@@ -172,7 +175,11 @@ fun PokemonList(
         ErrorView(state.error)
     } else {
         // Show the list of pokemons in a grid with two columns
-        LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
             items(state.items.size) { index ->
                 PokemonItem(state.items[index], onItemClick)
                 // Load more pokemons if we're near the end of the list
