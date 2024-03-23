@@ -119,15 +119,17 @@ fun CustomBackgroundColumn() {
 @Composable
 fun PokemonItem(
     pokemon: PokemonModel,
-    onItemClick: (PokemonModel) -> Unit
+    onItemClick: (PokemonModel) -> Unit, viewModel: PokemonsListViewModel
 ) {
     PokemonListCard(
         remoteImageUrl = pokemon.imageUrl,
         pokemonNumber = pokemon.number,
         pokemonName = pokemon.pokemonName,
         url = pokemon.url,
-        typeList = pokemon.type, onItemClick = onItemClick
-    ) {}
+        typeList = pokemon.type,viewModel = viewModel,
+        onItemClick = onItemClick,
+
+        )
 }
 
 @Composable
@@ -181,7 +183,7 @@ fun PokemonList(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             items(state.items.size) { index ->
-                PokemonItem(state.items[index], onItemClick)
+                PokemonItem(state.items[index], onItemClick, viewModel)
                 // Load more pokemons if we're near the end of the list
                 if (index == state.items.size - 1 && !state.isLoading && !state.endReached) {
                     onLoadMore()

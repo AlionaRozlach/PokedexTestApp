@@ -1,5 +1,7 @@
 package com.example.pokedextestapp.presentation.pokemons_list.components
 
+import android.graphics.drawable.BitmapDrawable
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -17,8 +20,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,10 +41,22 @@ import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintLayoutScope
 import androidx.constraintlayout.compose.Dimension
+import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.example.pokedextestapp.R
 import com.example.pokedextestapp.domain.model.PokemonModel
-
+import com.example.pokedextestapp.presentation.pokemons_list.PokemonsListViewModel
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 
 @Composable
 fun PokemonListCard(
@@ -45,15 +65,15 @@ fun PokemonListCard(
     pokemonName: String,
     url: String,
     typeList: List<String>,
-    onItemClick: (PokemonModel) -> Unit,
-    content: @Composable () -> Unit
+    viewModel: PokemonsListViewModel,
+    onItemClick: (PokemonModel) -> Unit
 ) {
     CardContent(
         pokemonName = pokemonName,
         typeList = typeList,
         pokemonNumber = pokemonNumber,
         remoteImageUrl = remoteImageUrl,
-        onItemClick = onItemClick, url = url
+        onItemClick = onItemClick, url = url, viewModel = viewModel
     )
 }
 
@@ -64,38 +84,72 @@ fun CardContent(
     pokemonNumber: Int,
     remoteImageUrl: String,
     onItemClick: (PokemonModel) -> Unit,
-    url: String
+    url: String, viewModel: PokemonsListViewModel
 ) {
-    Card(shape = RoundedCornerShape(16.dp),
-        backgroundColor = Color(72, 208, 176),
-        modifier = Modifier
-            .wrapContentSize()
-            .clickable {
-                onItemClick(
-                    PokemonModel(
-                        pokemonName,
-                        url,
-                        pokemonNumber,
-                        typeList,
-                        remoteImageUrl
-                    )
-                )
-            }
+    var dominantColor = remember { mutableStateOf(Color.Gray) }
+    var painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(remoteImageUrl)
+            .size(coil.size.Size.ORIGINAL)
+            .build(),
+        onSuccess = { success ->
+            val drawable = success.result.drawable
+            viewModel.calcDominantColor(drawable){ color ->
+                    dominantColor.value = color
+                }
+            println("Image loaded successfully: $dominantColor")
+        },
+        onLoading = {
+            println("Image loading...")
+        },
+        onError = { error ->
+            println("Error loading image: $error")
+        }
     )
-    {
-        ConstraintLayout(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.Gray)
-                .padding(4.dp),
-        ) {
-            val (image, pokemonId, pokemonInfo) = createRefs()
 
-            ImageSection(image, pokemonId, remoteImageUrl)
-            PokemonIDSection(pokemonId, pokemonNumber)
-            PokemonInfoSection(pokemonId, pokemonInfo, image, pokemonName, typeList)
+    if (painter.state is AsyncImagePainter.State.Success) {
+        Card(shape = RoundedCornerShape(16.dp),
+            backgroundColor = dominantColor.value,
+            modifier = Modifier
+                .wrapContentSize()
+                .clickable {
+                    onItemClick(
+                        PokemonModel(
+                            pokemonName,
+                            url,
+                            pokemonNumber,
+                            typeList,
+                            remoteImageUrl
+                        )
+                    )
+                }
+        )
+        {
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+            ) {
+                val (image, pokemonId, pokemonInfo) = createRefs()
+
+                ImageSection(image, pokemonId, remoteImageUrl)
+                PokemonIDSection(pokemonId, pokemonNumber)
+                PokemonInfoSection(pokemonId, pokemonInfo, image, pokemonName, typeList)
+            }
+        }
+    } else {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            CircularProgressIndicator(
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier.scale(0.5f)
+            )
         }
     }
+
 }
 
 @Composable
