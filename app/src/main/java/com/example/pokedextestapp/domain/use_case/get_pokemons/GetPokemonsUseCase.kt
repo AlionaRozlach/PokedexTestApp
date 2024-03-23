@@ -29,11 +29,13 @@ class GetPokemonsUseCase @Inject constructor(private val repository: PokemonRepo
                 viewModelScope.async {
                     val pokemonDetail = repository.getPokemonDetails(pokemon.name)
                     val types = pokemonDetail.types.map { it.type.name }
+                    val number = pokemonDetail.id.toInt()
                     PokemonModel(
                         pokemonName = pokemon.name,
                         url = pokemon.url,
-                        number = pokemonDetail.id.toInt(),
+                        number = number,
                         type = types,
+                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png"
                     )
                 }
             }

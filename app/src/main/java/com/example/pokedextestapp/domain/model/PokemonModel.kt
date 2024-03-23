@@ -4,5 +4,6 @@ data class PokemonModel(
     val pokemonName: String,
     val url: String,
     val number: Int,
-    val type: List<String>
+    val type: List<String>,
+    val imageUrl: String
 )
