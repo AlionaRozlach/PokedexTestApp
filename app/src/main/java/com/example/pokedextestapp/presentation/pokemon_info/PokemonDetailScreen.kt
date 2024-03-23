@@ -44,8 +44,10 @@ fun PokemonDetailScreen(
                 CircularProgressIndicator()
             }
         } else {
-            // Show Pokemon details
-            state.pokemon?.let { PokemonDetail(it) }
+            state.pokemon?.let {
+                PokemonDetail(it)
+                viewModel.getPokemonDetail(it.name)
+            }
         }
     }
 }
@@ -66,6 +68,7 @@ fun PokemonDetail(pokemon: PokemonDetailModel) {
 //                .aspectRatio(1f),
 //            contentScale = ContentScale.Fit
 //        )
+
 
         Spacer(modifier = Modifier.height(16.dp))
 

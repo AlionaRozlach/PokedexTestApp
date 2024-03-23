@@ -128,7 +128,6 @@ fun PokemonItem(
         url = pokemon.url,
         typeList = pokemon.type,viewModel = viewModel,
         onItemClick = onItemClick,
-
         )
 }
 

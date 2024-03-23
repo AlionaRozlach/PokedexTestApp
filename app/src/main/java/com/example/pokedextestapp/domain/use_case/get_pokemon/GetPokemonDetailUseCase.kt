@@ -19,19 +19,21 @@ class GetPokemonDetailUseCase@Inject constructor(private val repository: Pokemon
     operator fun invoke(name: String): Flow<Resource<PokemonDetailModel>> = flow {
         try {
             val pokemonEntity = repository.getPokemonDetails(name)
+            val pokemonSpecies = repository.getPokemonSpecies(name)
+            val pokemonDetailModel = (if (!pokemonSpecies.flavorTextEntries.isNullOrEmpty()) pokemonSpecies.flavorTextEntries.first{ it.language.name == "en" }.flavorText else "Description is not available for this pokemon.")?.let {
+                PokemonDetailModel(
+                    id = pokemonEntity.id.toInt(),
+                    name = pokemonEntity.name,
+                    height = pokemonEntity.height.toInt(),
+                    weight = pokemonEntity.weight.toInt(),
+                    baseExep = pokemonEntity.baseExperience ?: 0,
+                    formCounts =  if(!pokemonSpecies.formDescriptions.isNullOrEmpty()) pokemonSpecies.formDescriptions.size else 0,
+                    types = pokemonEntity.types.map { it.type.name },
+                    description = it
+                )
+            }
 
-            val pokemonDetailModel = PokemonDetailModel(
-                id = pokemonEntity.id.toInt(),
-                name = pokemonEntity.name,
-                height = pokemonEntity.height.toInt(),
-                weight = pokemonEntity.weight.toInt(),
-//                hp = getPokemonStatValue(pokemonEntity, "hp"),
-//                attack = getPokemonStatValue(pokemonEntity, "attack"),
-//                defense = getPokemonStatValue(pokemonEntity, "defense"),
-//                speed = getPokemonStatValue(pokemonEntity, "speed"),
-//                types = pokemonEntity.types.joinToString { it.type.name }
-            )
-
+            println("POKEMON DETAIL " + pokemonSpecies)
             emit(Resource.Success(pokemonDetailModel))
         } catch (e: Exception) {
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))

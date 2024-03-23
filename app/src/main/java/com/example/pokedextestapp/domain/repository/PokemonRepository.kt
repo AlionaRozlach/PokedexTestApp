@@ -9,4 +9,5 @@ import entity.common.NamedApiResources
 interface PokemonRepository {
     suspend fun getPokemonList(limit: Int, offset: Int): PokemonList
     suspend fun getPokemonDetails(name: String): entity.pokemon.Pokemon
+    suspend fun getPokemonSpecies(name: String): entity.pokemon.PokemonSpecies
 }
