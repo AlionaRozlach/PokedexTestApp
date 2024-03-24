@@ -2,6 +2,7 @@ package com.example.pokedextestapp.presentation.pokemon_info
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,11 +46,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pokedextestapp.R
 import com.example.pokedextestapp.domain.model.PokemonDetailModel
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
 @Destination
 fun PokemonDetailScreen(
     name: String,
+    navigator: DestinationsNavigator,
     viewModel: PokemonDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
@@ -67,17 +70,27 @@ fun PokemonDetailScreen(
                 CircularProgressIndicator()
             }
         } else {
-            state.pokemon?.let { PokemonDetailContent(modifier = Modifier.fillMaxSize(), it) }
+            state.pokemon?.let {
+                PokemonDetailContent(
+                    modifier = Modifier.fillMaxSize(),
+                    it,
+                    navigator
+                )
+            }
         }
     }
 }
 
 @Composable
-fun PokemonDetailContent(modifier: Modifier, pokemon: PokemonDetailModel) {
+fun PokemonDetailContent(
+    modifier: Modifier,
+    pokemon: PokemonDetailModel,
+    navigator: DestinationsNavigator
+) {
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        DetailScreenBg(modifier = Modifier.matchParentSize(), pokemonName = pokemon.name)
+        DetailScreenBg(modifier = Modifier.matchParentSize(), pokemonName = pokemon.name, navigator)
         CardWithPokemonInfo(
             modifier = Modifier
                 .fillMaxSize()
@@ -88,7 +101,7 @@ fun PokemonDetailContent(modifier: Modifier, pokemon: PokemonDetailModel) {
 
 
 @Composable
-fun DetailScreenBg(modifier: Modifier, pokemonName: String) {
+fun DetailScreenBg(modifier: Modifier, pokemonName: String, navigator: DestinationsNavigator) {
     Box(
         modifier = modifier
             .background(color = Color(72, 208, 176))
@@ -122,7 +135,8 @@ fun DetailScreenBg(modifier: Modifier, pokemonName: String) {
                     modifier = Modifier
                         .size(24.dp)
                         .offset(20.dp, -35.dp)
-                        .align(Alignment.BottomCenter),
+                        .align(Alignment.BottomCenter)
+                        .clickable { navigator.navigateUp() },
                     tint = Color.White
                 )
             }
@@ -248,7 +262,7 @@ fun ConstraintLayoutScope.InfoSection(
             .padding(bottom = 30.dp)
     ) {
         InfoTitle()
-        InfoDetail(exp,formCounts,species)
+        InfoDetail(exp, formCounts, species)
     }
 }
 
@@ -308,9 +322,11 @@ fun RoundedText(text: String) {
 }
 
 @Composable
-fun InfoDetail( exp: Number,
-                formCounts: Int,
-                species: String) {
+fun InfoDetail(
+    exp: Number,
+    formCounts: Int,
+    species: String
+) {
     Row {
         Column(modifier = Modifier) {
             Text(
