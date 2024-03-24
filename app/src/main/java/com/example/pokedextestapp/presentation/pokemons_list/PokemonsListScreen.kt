@@ -1,13 +1,9 @@
 package com.example.pokedextestapp.presentation.pokemons_list
 
-import android.graphics.Paint.Style
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -16,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,16 +23,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.pokedextestapp.R
 import com.example.pokedextestapp.domain.model.PokemonModel
 import com.example.pokedextestapp.presentation.destinations.PokemonDetailScreenDestination
-import com.example.pokedextestapp.presentation.pokemon_info.PokemonDetailScreen
 import com.example.pokedextestapp.presentation.pokemons_list.components.PokemonListCard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -67,7 +59,12 @@ fun PokemonsListScreen(
                 PokemonList(
                     onItemClick = { pokemon ->
                         navigator.navigate(
-                            PokemonDetailScreenDestination(name = pokemon.pokemonName)
+                            PokemonDetailScreenDestination(
+                                name = pokemon.pokemonName,
+                                pokemon.dominantColor?.red ?:Color.Gray.red,
+                                pokemon.dominantColor?.blue ?: Color.Gray.blue,
+                                pokemon.dominantColor?.green ?: Color.Gray.green,
+                            )
                         )
                     }
                 )
@@ -126,9 +123,9 @@ fun PokemonItem(
         pokemonNumber = pokemon.number,
         pokemonName = pokemon.pokemonName,
         url = pokemon.url,
-        typeList = pokemon.type,viewModel = viewModel,
+        typeList = pokemon.type, viewModel = viewModel,
         onItemClick = onItemClick,
-        )
+    )
 }
 
 @Composable

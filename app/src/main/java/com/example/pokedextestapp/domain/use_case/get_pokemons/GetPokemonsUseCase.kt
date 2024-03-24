@@ -35,7 +35,8 @@ class GetPokemonsUseCase @Inject constructor(private val repository: PokemonRepo
                         url = pokemon.url,
                         number = number,
                         type = types,
-                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png"
+                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png",
+                        null
                     )
                 }
             }

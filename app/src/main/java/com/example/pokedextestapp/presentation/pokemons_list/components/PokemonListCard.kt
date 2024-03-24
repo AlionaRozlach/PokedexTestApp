@@ -86,8 +86,8 @@ fun CardContent(
     onItemClick: (PokemonModel) -> Unit,
     url: String, viewModel: PokemonsListViewModel
 ) {
-    val dominantColor = remember { mutableStateOf(Color.Gray) }
-    val painter = rememberAsyncImagePainter(
+    var dominantColor = remember { mutableStateOf(Color.Gray) }
+    var painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
             .data(remoteImageUrl)
             .size(coil.size.Size.ORIGINAL)
@@ -119,8 +119,8 @@ fun CardContent(
                             url,
                             pokemonNumber,
                             typeList,
-                            remoteImageUrl
-                        )
+                            remoteImageUrl,
+                            dominantColor.value)
                     )
                 }
         )

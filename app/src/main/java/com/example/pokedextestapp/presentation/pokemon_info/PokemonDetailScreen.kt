@@ -54,7 +54,9 @@ fun PokemonDetailScreen(
     name: String,
     navigator: DestinationsNavigator,
     viewModel: PokemonDetailViewModel = hiltViewModel(),
-) {
+    red: Float, blue: Float, green: Float
+    ) {
+
     val state by viewModel.state.collectAsState()
 
     Surface(
@@ -74,7 +76,8 @@ fun PokemonDetailScreen(
                 PokemonDetailContent(
                     modifier = Modifier.fillMaxSize(),
                     it,
-                    navigator
+                    navigator,
+                    red, blue, green
                 )
             }
         }
@@ -85,26 +88,34 @@ fun PokemonDetailScreen(
 fun PokemonDetailContent(
     modifier: Modifier,
     pokemon: PokemonDetailModel,
-    navigator: DestinationsNavigator
-) {
+    navigator: DestinationsNavigator,
+    red: Float, blue: Float, green: Float) {
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        DetailScreenBg(modifier = Modifier.matchParentSize(), pokemonName = pokemon.name, navigator)
+        DetailScreenBg(
+            modifier = Modifier.matchParentSize(),
+            pokemonName = pokemon.name,
+            navigator,
+            red, blue, green
+        )
         CardWithPokemonInfo(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 100.dp), pokemon = pokemon
+                .padding(top = 100.dp), pokemon = pokemon, red, blue,green
         )
     }
 }
 
 
 @Composable
-fun DetailScreenBg(modifier: Modifier, pokemonName: String, navigator: DestinationsNavigator) {
+fun DetailScreenBg(
+    modifier: Modifier, pokemonName: String, navigator: DestinationsNavigator,
+    red: Float, blue: Float, green: Float
+) {
     Box(
         modifier = modifier
-            .background(color = Color(72, 208, 176))
+            .background(Color(red = red, blue = blue, green = green))
             .fillMaxSize()
     ) {
         ConstraintLayout(
@@ -180,7 +191,7 @@ fun DetailScreenBg(modifier: Modifier, pokemonName: String, navigator: Destinati
 }
 
 @Composable
-fun CardWithPokemonInfo(modifier: Modifier, pokemon: PokemonDetailModel) {
+fun CardWithPokemonInfo(modifier: Modifier, pokemon: PokemonDetailModel, red: Float, blue: Float, green: Float) {
     val scrollState = rememberScrollState()
     Card(
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -200,7 +211,7 @@ fun CardWithPokemonInfo(modifier: Modifier, pokemon: PokemonDetailModel) {
             DescriptionTextSection(desc, size, pokemon.description)
             SizeSection(size, desc, info, pokemon.height, pokemon.weight)
             InfoSection(info, size, type, pokemon.baseExep, pokemon.formCounts, pokemon.species)
-            TypeSection(type, info, pokemon.types)
+            TypeSection(type, info, pokemon.types, red, blue,green)
         }
     }
 }
@@ -230,14 +241,14 @@ fun ConstraintLayoutScope.DescriptionTextSection(
 fun ConstraintLayoutScope.TypeSection(
     type: ConstrainedLayoutReference,
     info: ConstrainedLayoutReference,
-    types: List<String>
+    types: List<String>, red: Float, blue: Float, green: Float
 ) {
     Column(modifier = Modifier.constrainAs(type) {
         top.linkTo(info.bottom)
         start.linkTo(parent.start)
     }, horizontalAlignment = Alignment.Start) {
         TypeTitle()
-        TypeDetail(stringList = types)
+        TypeDetail(stringList = types, red, blue, green)
     }
 }
 
@@ -298,23 +309,24 @@ fun TypeTitle() {
 }
 
 @Composable
-fun TypeDetail(stringList: List<String>) {
+fun TypeDetail(stringList: List<String>, red: Float, blue: Float, green: Float) {
+    val color = Color(red = red, blue = blue, green = green)
     LazyRow {
         items(stringList.size) { it ->
-            RoundedText(text = stringList[it])
+            RoundedText(text = stringList[it], color)
         }
     }
 }
 
 @Composable
-fun RoundedText(text: String) {
+fun RoundedText(text: String, color: Color) {
     Text(
         text = text,
         color = Color.White,
         modifier = Modifier
             .padding(8.dp)
             .background(
-                color = MaterialTheme.colors.primary,
+                color = color,
                 shape = RoundedCornerShape(16.dp)
             )
             .padding(horizontal = 16.dp, vertical = 8.dp)
