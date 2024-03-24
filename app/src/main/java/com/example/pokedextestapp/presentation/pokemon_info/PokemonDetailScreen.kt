@@ -390,8 +390,16 @@ fun ConstraintLayoutScope.SizeSection(
     desc: ConstrainedLayoutReference,
     info: ConstrainedLayoutReference,
     height: Int,
-    weight: Int
+    weight: Int,
+    viewModel: PokemonDetailViewModel = hiltViewModel()
 ) {
+    val heightCm = viewModel.convertHeightToCentimeters(height)
+    val weightKg = viewModel.convertWeightToKilograms(weight)
+    val weightLbs = viewModel.convertWeightToPounds(weight)
+
+    val formatWeight = "$weightLbs lbs ($weightKg kg)"
+    val formatHeight = viewModel.formatHeight(heightCm = heightCm.toDouble())
+
     Card(
         modifier = Modifier
             .constrainAs(size) {
@@ -418,7 +426,7 @@ fun ConstraintLayoutScope.SizeSection(
                     textAlign = TextAlign.Start
                 )
                 Text(
-                    text = height.toString() + "cm",
+                    text = formatHeight,
                     fontSize = 14.sp,
                     color = Color.Black,
                     textAlign = TextAlign.Start
@@ -433,7 +441,7 @@ fun ConstraintLayoutScope.SizeSection(
                     textAlign = TextAlign.Start
                 )
                 Text(
-                    text = weight.toString() + "kg",
+                    text = formatWeight,
                     fontSize = 14.sp,
                     color = Color.Black,
                     textAlign = TextAlign.Start

@@ -64,13 +64,26 @@ class PokemonDetailViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun calcDominantColor(drawable: Drawable, onFinish: (Color) -> Unit) {
-        val bmp = (drawable as BitmapDrawable).bitmap.copy(Bitmap.Config.ARGB_8888, true)
+    fun convertWeightToKilograms(weightInHectograms: Int): String {
+        return (weightInHectograms.toDouble() / 10.0).toString()
+    }
 
-        Palette.from(bmp).generate { palette ->
-            palette?.dominantSwatch?.rgb?.let { colorValue ->
-                onFinish(Color(colorValue))
-            }
-        }
+    fun convertHeightToCentimeters(heightInDecimeters: Int): Int {
+        return (heightInDecimeters * 10)
+    }
+
+    fun convertWeightToPounds(weightInHectograms: Int): String {
+        return String.format("%.1f",weightInHectograms.toDouble() * 0.220462)
+    }
+
+    fun formatHeight(heightCm: Double): String {
+        val totalInches = heightCm / 2.54 // Convert centimeters to inches
+        val feet = (totalInches / 12).toInt() // Extract the feet part
+        val inches = (totalInches % 12).toInt() // Extract the inches part
+        val remainingInches =
+            totalInches - feet * 12 - inches // Get the remaining inches as a fraction
+        val roundedInches =
+            String.format("%.1f", remainingInches) // Round remaining inches to 1 decimal place
+        return "${feet}'${roundedInches}\" (${String.format("%.1f", heightCm)} cm)"
     }
 }
