@@ -7,6 +7,7 @@ data class PokemonDetailModel(
     val weight: Int,
     val baseExep: Number,
     val formCounts: Int,
+    val species: String,
     val types: List<String>,
     val description: String
 )

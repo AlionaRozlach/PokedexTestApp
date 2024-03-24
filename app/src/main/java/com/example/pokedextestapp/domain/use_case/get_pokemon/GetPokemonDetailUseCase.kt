@@ -1,5 +1,6 @@
 package com.example.pokedextestapp.domain.use_case.get_pokemon
 
+import androidx.compose.ui.text.capitalize
 import com.example.pokedextestapp.domain.model.PokemonDetailModel
 import com.example.pokedextestapp.domain.model.PokemonListModel
 import com.example.pokedextestapp.domain.model.PokemonModel
@@ -33,7 +34,8 @@ class GetPokemonDetailUseCase @Inject constructor(
                     weight = pokemonEntity.weight.toInt(),
                     baseExep = pokemonEntity.base_experience ?: 0,
                     formCounts = pokemonEntity.forms.size,
-                    types = pokemonEntity.types.map { it.type.name },
+                    species = pokemonSpecies.egg_groups.joinToString(", ") { it.name.capitalize() },
+                    types = pokemonEntity.types.map { it.type.name.capitalize()},
                     description = flavorTextEntriesInEnglish.flavor_text ?: "Description is not available."
                 )
             emit(Resource.Success(pokemonDetailModel))

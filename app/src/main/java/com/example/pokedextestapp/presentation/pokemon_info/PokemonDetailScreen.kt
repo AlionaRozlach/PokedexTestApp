@@ -43,6 +43,7 @@ import androidx.constraintlayout.compose.ConstraintLayoutScope
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pokedextestapp.R
+import com.example.pokedextestapp.domain.model.PokemonDetailModel
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Composable
@@ -66,23 +67,21 @@ fun PokemonDetailScreen(
                 CircularProgressIndicator()
             }
         } else {
-
-            state.pokemon?.let { PokemonDetailContent(modifier = Modifier.fillMaxSize(), it.name) }
+            state.pokemon?.let { PokemonDetailContent(modifier = Modifier.fillMaxSize(), it) }
         }
     }
 }
 
 @Composable
-fun PokemonDetailContent(modifier: Modifier, pokemon: String) {
+fun PokemonDetailContent(modifier: Modifier, pokemon: PokemonDetailModel) {
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        DetailScreenBg(modifier = Modifier.matchParentSize(), pokemonName = pokemon) // Рисуем фон
-
+        DetailScreenBg(modifier = Modifier.matchParentSize(), pokemonName = pokemon.name)
         CardWithPokemonInfo(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 100.dp)
+                .padding(top = 100.dp), pokemon = pokemon
         )
     }
 }
@@ -167,7 +166,7 @@ fun DetailScreenBg(modifier: Modifier, pokemonName: String) {
 }
 
 @Composable
-fun CardWithPokemonInfo(modifier: Modifier) {
+fun CardWithPokemonInfo(modifier: Modifier, pokemon: PokemonDetailModel) {
     val scrollState = rememberScrollState()
     Card(
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -184,10 +183,10 @@ fun CardWithPokemonInfo(modifier: Modifier) {
         ) {
             val (desc, size, info, type) = createRefs()
 
-            DescriptionTextSection(desc, size)
-            SizeSection(size, desc, info)
-            InfoSection(info, size, type)
-            TypeSection(type, info)
+            DescriptionTextSection(desc, size, pokemon.description)
+            SizeSection(size, desc, info, pokemon.height, pokemon.weight)
+            InfoSection(info, size, type, pokemon.baseExep, pokemon.formCounts, pokemon.species)
+            TypeSection(type, info, pokemon.types)
         }
     }
 }
@@ -195,10 +194,11 @@ fun CardWithPokemonInfo(modifier: Modifier) {
 @Composable
 fun ConstraintLayoutScope.DescriptionTextSection(
     desc: ConstrainedLayoutReference,
-    size: ConstrainedLayoutReference
+    size: ConstrainedLayoutReference,
+    pokemonDescription: String
 ) {
     Text(
-        text = "Bulbasaur can be seen in bright sunlight. There is a seed on its back. By soaking up the sun's rays, the seed grows progressively larger. ",
+        text = pokemonDescription,
         fontSize = 14.sp,
         color = Color(48, 57, 67),
         overflow = TextOverflow.Ellipsis,
@@ -215,30 +215,26 @@ fun ConstraintLayoutScope.DescriptionTextSection(
 @Composable
 fun ConstraintLayoutScope.TypeSection(
     type: ConstrainedLayoutReference,
-    info: ConstrainedLayoutReference
+    info: ConstrainedLayoutReference,
+    types: List<String>
 ) {
     Column(modifier = Modifier.constrainAs(type) {
         top.linkTo(info.bottom)
         start.linkTo(parent.start)
     }, horizontalAlignment = Alignment.Start) {
-        val stringList = listOf(
-            "String 1",
-            "String 2",
-            "String 3",
-            "String 4",
-            "String 4",
-            "String 4",
-            // Add more strings as needed
-        )
         TypeTitle()
-        TypeDetail(stringList = stringList)
+        TypeDetail(stringList = types)
     }
 }
 
 @Composable
 fun ConstraintLayoutScope.InfoSection(
     info: ConstrainedLayoutReference,
-    size: ConstrainedLayoutReference, type: ConstrainedLayoutReference
+    size: ConstrainedLayoutReference,
+    type: ConstrainedLayoutReference,
+    exp: Number,
+    formCounts: Int,
+    species: String
 ) {
     Column(
         modifier = Modifier
@@ -252,7 +248,7 @@ fun ConstraintLayoutScope.InfoSection(
             .padding(bottom = 30.dp)
     ) {
         InfoTitle()
-        InfoDetail()
+        InfoDetail(exp,formCounts,species)
     }
 }
 
@@ -312,7 +308,9 @@ fun RoundedText(text: String) {
 }
 
 @Composable
-fun InfoDetail() {
+fun InfoDetail( exp: Number,
+                formCounts: Int,
+                species: String) {
     Row {
         Column(modifier = Modifier) {
             Text(
@@ -341,17 +339,17 @@ fun InfoDetail() {
         }
         Column(modifier = Modifier.padding(start = 20.dp)) {
             Text(
-                text = "40 exp",
+                text = exp.toString() + "exp",
                 textAlign = TextAlign.End
             )
             Text(
                 modifier = Modifier.padding(top = 8.dp),
-                text = "Monster",
+                text = species,
                 textAlign = TextAlign.End
             )
             Text(
                 modifier = Modifier.padding(top = 8.dp),
-                text = "5",
+                text = formCounts.toString(),
                 textAlign = TextAlign.End
             )
         }
@@ -362,7 +360,9 @@ fun InfoDetail() {
 fun ConstraintLayoutScope.SizeSection(
     size: ConstrainedLayoutReference,
     desc: ConstrainedLayoutReference,
-    info: ConstrainedLayoutReference
+    info: ConstrainedLayoutReference,
+    height: Int,
+    weight: Int
 ) {
     Card(
         modifier = Modifier
@@ -390,7 +390,7 @@ fun ConstraintLayoutScope.SizeSection(
                     textAlign = TextAlign.Start
                 )
                 Text(
-                    text = "2’3.6” (0.70 cm)",
+                    text = height.toString() + "cm",
                     fontSize = 14.sp,
                     color = Color.Black,
                     textAlign = TextAlign.Start
@@ -405,7 +405,7 @@ fun ConstraintLayoutScope.SizeSection(
                     textAlign = TextAlign.Start
                 )
                 Text(
-                    text = "15.2 lbs (6.9 kg)",
+                    text = weight.toString() + "kg",
                     fontSize = 14.sp,
                     color = Color.Black,
                     textAlign = TextAlign.Start
@@ -413,10 +413,4 @@ fun ConstraintLayoutScope.SizeSection(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun myPreview() {
-    PokemonDetailContent(Modifier.fillMaxSize(), "BBBBBB")
 }
