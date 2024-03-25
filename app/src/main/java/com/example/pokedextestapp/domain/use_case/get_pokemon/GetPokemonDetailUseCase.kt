@@ -9,6 +9,11 @@ import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
 
+/**
+ * Use case for retrieving detailed information about a Pokemon.
+ * @param retrofitRepository The repository providing access to Pokemon data through Retrofit.
+ * @return Flow<Resource<PokemonDetailModel>> A Flow emitting Resource wrapping PokemonDetailModel.
+ */
 class GetPokemonDetailUseCase @Inject constructor(
     private val retrofitRepository: PokemonRetrofitRepository
 ) {

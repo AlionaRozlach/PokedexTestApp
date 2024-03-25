@@ -5,6 +5,11 @@ import com.example.pokedextestapp.data.remote.responses.PokemonSpecies
 import retrofit2.http.GET
 import retrofit2.http.Path
 
+/**
+ * Interface representing
+ * a client for interacting with an API
+ * using the Retrofit library.
+ */
 interface PokemonRetrofitRepository {
     @GET("pokemon/{name}")
     suspend fun getPokemonInfo(

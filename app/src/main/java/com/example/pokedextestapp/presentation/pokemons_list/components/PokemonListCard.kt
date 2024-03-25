@@ -49,6 +49,17 @@ import com.example.pokedextestapp.domain.model.PokemonModel
 import com.example.pokedextestapp.presentation.pokemons_list.PokemonsListViewModel
 import java.util.Locale
 
+/**
+ * Composable function representing a card containing Pokemon information.
+ *
+ * @param remoteImageUrl The URL of the remote image to display.
+ * @param pokemonNumber The number of the Pokemon.
+ * @param pokemonName The name of the Pokemon.
+ * @param url The URL of the Pokemon.
+ * @param typeList The list of types of the Pokemon.
+ * @param viewModel The view model for managing Pokemon list data.
+ * @param onItemClick Callback function to handle item click events.
+ */
 @Composable
 fun PokemonListCard(
     remoteImageUrl: String,
@@ -68,6 +79,17 @@ fun PokemonListCard(
     )
 }
 
+/**
+ * Composable function representing the content of a Pokemon card.
+ *
+ * @param pokemonName The name of the Pokemon.
+ * @param typeList The list of types of the Pokemon.
+ * @param pokemonNumber The number of the Pokemon.
+ * @param remoteImageUrl The URL of the remote image to display.
+ * @param onItemClick Callback function to handle item click events.
+ * @param url The URL of the Pokemon.
+ * @param viewModel The view model for managing Pokemon list data.
+ */
 @Composable
 fun CardContent(
     pokemonName: String,
@@ -144,13 +166,20 @@ fun CardContent(
 
 }
 
+/**
+ * Composable function representing the image section within a ConstraintLayout.
+ *
+ * @param image The reference to the image within the ConstraintLayout.
+ * @param titleConst The reference to the title within the ConstraintLayout.
+ * @param url The URL of the image to be displayed.
+ */
 @Composable
 fun ConstraintLayoutScope.ImageSection(
     image: ConstrainedLayoutReference,
     titleConst: ConstrainedLayoutReference,
     url: String
 ) {
-    Content(
+    ImagesContent(
         modifier = Modifier
             .constrainAs(image) {
                 top.linkTo(titleConst.bottom)
@@ -161,6 +190,12 @@ fun ConstraintLayoutScope.ImageSection(
     )
 }
 
+/**
+ * Composable function representing the section displaying the Pokemon ID within a ConstraintLayout.
+ *
+ * @param titleConst The reference to the title within the ConstraintLayout.
+ * @param pokemonNumber The number of the Pokemon.
+ */
 @Composable
 fun ConstraintLayoutScope.PokemonIDSection(
     titleConst: ConstrainedLayoutReference,
@@ -181,6 +216,15 @@ fun ConstraintLayoutScope.PokemonIDSection(
     )
 }
 
+/**
+ * Composable function representing the section displaying Pokemon information within a ConstraintLayout.
+ *
+ * @param titleConst The reference to the title within the ConstraintLayout.
+ * @param authorConst The reference to the author within the ConstraintLayout.
+ * @param image The reference to the image within the ConstraintLayout.
+ * @param pokemonName The name of the Pokemon.
+ * @param typeList The list of types of the Pokemon.
+ */
 @Composable
 fun ConstraintLayoutScope.PokemonInfoSection(
     titleConst: ConstrainedLayoutReference,
@@ -200,6 +244,13 @@ fun ConstraintLayoutScope.PokemonInfoSection(
         })
 }
 
+/**
+ * Composable function representing the information of a Pokemon.
+ *
+ * @param pokemonName The name of the Pokemon.
+ * @param listOfTypes The list of types of the Pokemon.
+ * @param modifier The modifier for the column layout.
+ */
 @Composable
 fun PokemonInfo(pokemonName: String, listOfTypes: List<String>, modifier: Modifier) {
     Column(
@@ -233,8 +284,14 @@ fun PokemonInfo(pokemonName: String, listOfTypes: List<String>, modifier: Modifi
     }
 }
 
+/**
+ * Composable function representing images within a box(bottom right corner of the card).
+ *
+ * @param modifier The modifier for the content layout.
+ * @param url The URL of the image.
+ */
 @Composable
-fun Content(modifier: Modifier, url: String) {
+fun ImagesContent(modifier: Modifier, url: String) {
     Box(
         modifier = modifier,
     ) {
@@ -262,6 +319,11 @@ fun Content(modifier: Modifier, url: String) {
     }
 }
 
+/**
+ * Composable function representing a column of strings.
+ *
+ * @param stringList The list of types to display.
+ */
 @Composable
 fun StringListColumn(stringList: List<String>) {
     Column {

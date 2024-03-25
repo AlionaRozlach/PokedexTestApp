@@ -8,6 +8,10 @@ import entity.pokemon.Pokemon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+/**
+ * This class implements methods for executing API requests
+ * using the PokeApi-Kotlin wrapper.
+ */
 class PokemonRepositoryImpl : PokemonRepository {
     override suspend fun getPokemonList(limit: Int, offset: Int):PokemonList{
         return withContext(Dispatchers.IO) {

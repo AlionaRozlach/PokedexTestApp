@@ -15,6 +15,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
+/**
+ * ViewModel for the Pokemon Detail screen.
+ * @param getPokemonDetailUseCase The use case responsible for fetching Pokemon details.
+ * @param savedStateHandle The saved state handle for retrieving information from the previous screen.
+ */
 @HiltViewModel
 class PokemonDetailViewModel @Inject constructor(
     private val getPokemonDetailUseCase: GetPokemonDetailUseCase,
@@ -28,6 +33,9 @@ class PokemonDetailViewModel @Inject constructor(
 
     private var pokemonList = mutableStateOf<List<PokemonModel>>(listOf())
 
+    /**
+     * Initializes the ViewModel.
+     */
     init {
         val name = savedStateHandle.get<String>("name")
         if (name != null) {
@@ -35,6 +43,10 @@ class PokemonDetailViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Fetches Pokemon details.
+     * @param name The name of the Pokemon.
+     */
     fun getPokemonDetail(name: String) {
         getPokemonDetailUseCase(
             name
@@ -57,18 +69,38 @@ class PokemonDetailViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    /**
+     * Converts weight from hectograms to kilograms.
+     * @param weightInHectograms The weight in hectograms.
+     * @return The weight in kilograms.
+     */
     fun convertWeightToKilograms(weightInHectograms: Int): String {
         return (weightInHectograms.toDouble() / 10.0).toString()
     }
 
+    /**
+     * Converts height from decimeters to centimeters.
+     * @param heightInDecimeters The height in decimeters.
+     * @return The height in centimeters.
+     */
     fun convertHeightToCentimeters(heightInDecimeters: Int): Int {
         return (heightInDecimeters * 10)
     }
 
+    /**
+     * Converts weight from hectograms to pounds.
+     * @param weightInHectograms The weight in hectograms.
+     * @return The weight in pounds.
+     */
     fun convertWeightToPounds(weightInHectograms: Int): String {
         return String.format("%.1f", weightInHectograms.toDouble() * 0.220462)
     }
 
+    /**
+     * Formats height for display.
+     * @param heightCm The height in centimeters.
+     * @return The formatted height string.
+     */
     fun formatHeight(heightCm: Int): String {
         val inchesTotal = heightCm.toDouble() * 0.393701
         val feet = (inchesTotal / 12).toInt()

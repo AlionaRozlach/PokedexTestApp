@@ -14,6 +14,13 @@ import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import javax.inject.Inject
 
+/**
+ * Use case for retrieving a list of Pokemons.
+ * @param repository The repository providing access to Pokemon data through wrapper PokeAPI - Kotlin.
+ * @param limit The maximum number of Pokemons to retrieve.
+ * @param offset The offset for pagination.
+ * @return Flow<Resource<PokemonListModel>> A Flow emitting Resource wrapping PokemonListModel.
+ */
 class GetPokemonsUseCase @Inject constructor(private val repository: PokemonRepository) {
     operator fun invoke(limit: Int, offset: Int): Flow<Resource<PokemonListModel>> = flow {
         try {

@@ -20,20 +20,33 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
+/**
+ * ViewModel responsible for managing the state and business logic related to the list of Pokemons.
+ *
+ * @param getPokemonsUseCase The use case responsible for fetching Pokemons.
+ */
 @HiltViewModel
 class PokemonsListViewModel @Inject constructor(private val getPokemonsUseCase: GetPokemonsUseCase) :
     ViewModel() {
 
+    // Current page of the list pagination
     private var currentPage = 0
+
+    // Mutable state flow representing the state of the Pokemons list
     private val _state = MutableStateFlow(PokemonsListState())
     val state: StateFlow<PokemonsListState> = _state.asStateFlow()
 
+    // Mutable state representing the list of Pokemons
     private var pokemonList = mutableStateOf<List<PokemonModel>>(listOf())
 
     init {
+        // Initial fetch of Pokemons when ViewModel is created
         getPokemons()
     }
 
+    /**
+     * Fetches Pokemons from the data source.
+     */
     fun getPokemons() {
         getPokemonsUseCase(PAGE_SIZE, currentPage * PAGE_SIZE).onEach { result ->
             when (result) {
@@ -57,6 +70,12 @@ class PokemonsListViewModel @Inject constructor(private val getPokemonsUseCase: 
         }.launchIn(viewModelScope)
     }
 
+    /**
+     * Calculates the dominant color from a Drawable and invokes the callback onFinish with the result.
+     *
+     * @param drawable The Drawable from which to extract the dominant color.
+     * @param onFinish Callback function to be invoked with the calculated dominant color.
+     */
     fun calcDominantColor(drawable: Drawable, onFinish: (Color) -> Unit) {
         val bmp = (drawable as BitmapDrawable).bitmap.copy(Bitmap.Config.ARGB_8888, true)
 

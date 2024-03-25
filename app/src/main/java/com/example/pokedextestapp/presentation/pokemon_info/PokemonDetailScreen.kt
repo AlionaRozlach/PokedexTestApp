@@ -47,6 +47,15 @@ import com.example.pokedextestapp.domain.model.PokemonDetailModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+/**
+ * Composable function for displaying the Pokemon detail screen.
+ * @param name The name of the Pokemon.
+ * @param navigator The navigator used for navigation within the application.
+ * @param viewModel The view model for managing Pokemon detail screen state.
+ * @param red Red component of the dominant color.
+ * @param blue Blue component of the dominant color.
+ * @param green Green component of the dominant color.
+ */
 @Composable
 @Destination
 fun PokemonDetailScreen(
@@ -95,6 +104,15 @@ fun PokemonDetailScreen(
     }
 }
 
+/**
+ * Composable function for displaying the content of Pokemon detail screen.
+ * @param modifier Modifier for the composable.
+ * @param pokemon The Pokemon detail model.
+ * @param navigator The navigator used for navigation within the application.
+ * @param red Red component of the dominant color.
+ * @param blue Blue component of the dominant color.
+ * @param green Green component of the dominant color.
+ */
 @Composable
 fun PokemonDetailContent(
     modifier: Modifier,
@@ -119,7 +137,15 @@ fun PokemonDetailContent(
     }
 }
 
-
+/**
+ * Composable function for displaying the background of Pokemon detail screen.
+ * @param modifier Modifier for the composable.
+ * @param pokemonName The name of the Pokemon.
+ * @param navigator The navigator used for navigation within the application.
+ * @param red Red component of the dominant color.
+ * @param blue Blue component of the dominant color.
+ * @param green Green component of the dominant color.
+ */
 @Composable
 fun DetailScreenBg(
     modifier: Modifier, pokemonName: String, navigator: DestinationsNavigator,
@@ -202,6 +228,14 @@ fun DetailScreenBg(
     }
 }
 
+/**
+ * Composable function for displaying the card with Pokemon info.
+ * @param modifier Modifier for the composable.
+ * @param pokemon The Pokemon detail model.
+ * @param red Red component of the dominant color.
+ * @param blue Blue component of the dominant color.
+ * @param green Green component of the dominant color.
+ */
 @Composable
 fun CardWithPokemonInfo(
     modifier: Modifier,
@@ -234,6 +268,12 @@ fun CardWithPokemonInfo(
     }
 }
 
+/**
+ * Composable function for displaying the description text section.
+ * @param desc Reference to the constraint of the description section.
+ * @param size Reference to the constraint of the size section.
+ * @param pokemonDescription The description of the Pokemon.
+ */
 @Composable
 fun ConstraintLayoutScope.DescriptionTextSection(
     desc: ConstrainedLayoutReference,
@@ -255,6 +295,15 @@ fun ConstraintLayoutScope.DescriptionTextSection(
     )
 }
 
+/**
+ * Composable function for displaying the type section of Pokemon detail screen.
+ * @param type Reference to the constraint of the type section.
+ * @param info Reference to the constraint of the info section.
+ * @param types List of Pokemon types.
+ * @param red Red component of the dominant color.
+ * @param blue Blue component of the dominant color.
+ * @param green Green component of the dominant color.
+ */
 @Composable
 fun ConstraintLayoutScope.TypeSection(
     type: ConstrainedLayoutReference,
@@ -270,6 +319,15 @@ fun ConstraintLayoutScope.TypeSection(
     }
 }
 
+/**
+ * Composable function for displaying the info section of Pokemon detail screen.
+ * @param info Reference to the constraint of the info section.
+ * @param size Reference to the constraint of the size section.
+ * @param type Reference to the constraint of the type section.
+ * @param exp The base experience of the Pokemon.
+ * @param formCounts The count of forms the Pokemon has.
+ * @param species The species of the Pokemon.
+ */
 @Composable
 fun ConstraintLayoutScope.InfoSection(
     info: ConstrainedLayoutReference,
@@ -295,6 +353,9 @@ fun ConstraintLayoutScope.InfoSection(
     }
 }
 
+/**
+ * Composable function for displaying the title of the info section.
+ */
 @Composable
 fun InfoTitle() {
     Text(
@@ -311,6 +372,9 @@ fun InfoTitle() {
     )
 }
 
+/**
+ * Composable function for displaying the title of the type section.
+ */
 @Composable
 fun TypeTitle() {
     Text(
@@ -326,6 +390,13 @@ fun TypeTitle() {
     )
 }
 
+/**
+ * Composable function for displaying the details of Pokemon types.
+ * @param stringList List of Pokemon types.
+ * @param red Red component of the background color.
+ * @param blue Blue component of the background color.
+ * @param green Green component of the background color.
+ */
 @Composable
 fun TypeDetail(stringList: List<String>, red: Float, blue: Float, green: Float) {
     val color = Color(red = red, blue = blue, green = green)
@@ -336,6 +407,11 @@ fun TypeDetail(stringList: List<String>, red: Float, blue: Float, green: Float) 
     }
 }
 
+/**
+ * Composable function for displaying a text inside rounded shape.
+ * @param text The text to display.
+ * @param color The background color of the text.
+ */
 @Composable
 fun RoundedText(text: String, color: Color) {
     Text(
@@ -351,6 +427,12 @@ fun RoundedText(text: String, color: Color) {
     )
 }
 
+/**
+ * Composable function for displaying the details of Pokemon info.
+ * @param exp The base experience of the Pokemon.
+ * @param formCounts The count of forms the Pokemon has.
+ * @param species The species of the Pokemon.
+ */
 @Composable
 fun InfoDetail(
     exp: Number,
@@ -402,6 +484,15 @@ fun InfoDetail(
     }
 }
 
+/**
+ * Composable function for displaying the size section of Pokemon detail screen.
+ * @param size Reference to the constraint of the size section.
+ * @param desc Reference to the constraint of the description section.
+ * @param info Reference to the constraint of the info section.
+ * @param height The height of the Pokemon.
+ * @param weight The weight of the Pokemon.
+ * @param viewModel The view model for managing Pokemon detail screen state.
+ */
 @Composable
 fun ConstraintLayoutScope.SizeSection(
     size: ConstrainedLayoutReference,

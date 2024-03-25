@@ -9,6 +9,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * Dagger Hilt module for providing dependencies
+ * required for using the PokeApi-Kotlin wrapper.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {

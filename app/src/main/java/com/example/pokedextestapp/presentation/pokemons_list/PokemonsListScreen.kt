@@ -34,6 +34,12 @@ import com.example.pokedextestapp.presentation.pokemons_list.components.PokemonL
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+/**
+ * Composable function representing the screen displaying the list of Pokemons.
+ *
+ * @param navigator The navigator to handle navigation between destinations.
+ * @param viewModel The view model for managing the Pokemons list screen.
+ */
 @Composable
 @Destination(start = true)
 fun PokemonsListScreen(
@@ -87,6 +93,9 @@ fun PokemonsListScreen(
 
 }
 
+/**
+ * Composable function to display a custom background.
+ */
 @Composable
 fun CustomBackgroundColumn() {
     Box(
@@ -109,6 +118,13 @@ fun CustomBackgroundColumn() {
     }
 }
 
+/**
+ * Composable function to display a single Pokemon item.
+ *
+ * @param pokemon The PokemonModel representing the Pokemon item.
+ * @param onItemClick The callback function for item click events.
+ * @param viewModel The view model for managing the Pokemons list screen.
+ */
 @Composable
 fun PokemonItem(
     pokemon: PokemonModel,
@@ -124,6 +140,9 @@ fun PokemonItem(
     )
 }
 
+/**
+ * Composable function to display a loading indicator.
+ */
 @Composable
 fun LoadingIndicator() {
     Box(
@@ -134,6 +153,11 @@ fun LoadingIndicator() {
     }
 }
 
+/**
+ * Composable function to display an error view.
+ *
+ * @param error The error message to display.
+ */
 @Composable
 fun ErrorView(error: String) {
     Box(
@@ -147,6 +171,12 @@ fun ErrorView(error: String) {
     }
 }
 
+/**
+ * Composable function to display the list of Pokemons.
+ *
+ * @param viewModel The view model for managing the Pokemons list screen.
+ * @param onItemClick The callback function for item click events.
+ */
 @Composable
 fun PokemonList(
     viewModel: PokemonsListViewModel = hiltViewModel(),
@@ -160,7 +190,6 @@ fun PokemonList(
             viewModel.getPokemons()
         }
     }
-
     // Show loading indicator while loading
     if (state.isLoading && state.items.isEmpty()) {
         LoadingIndicator()
