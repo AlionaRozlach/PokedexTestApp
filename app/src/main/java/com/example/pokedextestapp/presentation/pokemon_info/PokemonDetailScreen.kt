@@ -55,7 +55,6 @@ fun PokemonDetailScreen(
     viewModel: PokemonDetailViewModel = hiltViewModel(),
     red: Float, blue: Float, green: Float
 ) {
-
     val state by viewModel.state.collectAsState()
 
     Surface(
@@ -69,6 +68,19 @@ fun PokemonDetailScreen(
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()
+            }
+        } else if (state.error.isNotBlank()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                androidx.compose.material3.Text(
+                    text = state.error,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                )
             }
         } else {
             state.pokemon?.let {
