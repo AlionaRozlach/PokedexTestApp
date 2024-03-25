@@ -1,17 +1,8 @@
 package com.example.pokedextestapp.domain.use_case.get_pokemon
 
-import androidx.compose.ui.text.capitalize
 import com.example.pokedextestapp.domain.model.PokemonDetailModel
-import com.example.pokedextestapp.domain.model.PokemonListModel
-import com.example.pokedextestapp.domain.model.PokemonModel
-import com.example.pokedextestapp.domain.repository.PokemonRepository
 import com.example.pokedextestapp.domain.repository.PokemonRetrofitRepository
 import com.example.pokedextestapp.util.Resource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
@@ -23,6 +14,7 @@ class GetPokemonDetailUseCase @Inject constructor(
 ) {
     operator fun invoke(name: String): Flow<Resource<PokemonDetailModel>> = flow {
         try {
+            emit(Resource.Loading(true))
             val pokemonSpecies = retrofitRepository.getPokemonSpecies(name)
             val pokemonEntity = retrofitRepository.getPokemonInfo(name)
             val flavorTextEntriesInEnglish = pokemonSpecies.flavor_text_entries[7]
@@ -39,12 +31,14 @@ class GetPokemonDetailUseCase @Inject constructor(
                     weight = pokemonEntity.weight,
                     baseExep = pokemonEntity.base_experience,
                     formCounts = pokemonEntity.forms.size,
-                    species = pokemonSpecies.egg_groups.joinToString(", ") { it.name.replaceFirstChar {
-                        if (it.isLowerCase()) it.titlecase(
-                            Locale.ROOT
-                        ) else it.toString()
-                    } },
-                    types = pokemonEntity.types.map { it.type.name.capitalize(Locale.ROOT)},
+                    species = pokemonSpecies.egg_groups.joinToString(", ") {
+                        it.name.replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.ROOT
+                            ) else it.toString()
+                        }
+                    },
+                    types = pokemonEntity.types.map { it.type.name.capitalize(Locale.ROOT) },
                     description = flavorTextEntriesInEnglish.flavor_text
                 )
             emit(Resource.Success(pokemonDetailModel))

@@ -4,8 +4,6 @@ import com.example.pokedextestapp.domain.model.PokemonListModel
 import com.example.pokedextestapp.domain.model.PokemonModel
 import com.example.pokedextestapp.domain.repository.PokemonRepository
 import com.example.pokedextestapp.util.Resource
-import entity.common.NamedApiResource
-import entity.common.NamedApiResources
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -19,12 +17,10 @@ import javax.inject.Inject
 class GetPokemonsUseCase @Inject constructor(private val repository: PokemonRepository) {
     operator fun invoke(limit: Int, offset: Int): Flow<Resource<PokemonListModel>> = flow {
         try {
-//            emit(Resource.Loading(true))
             val pokemonsDto = repository.getPokemonList(limit, offset)
             val pokemonModels = mutableListOf<PokemonModel>()
             val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
-            // Fetch Pokemon details in parallel using coroutines
             val pokemonDetailsDeferred = pokemonsDto.results.map { pokemon ->
                 viewModelScope.async {
                     val pokemonDetail = repository.getPokemonDetails(pokemon.name)
@@ -42,11 +38,9 @@ class GetPokemonsUseCase @Inject constructor(private val repository: PokemonRepo
             }
 
             val pokemonDetails = pokemonDetailsDeferred.awaitAll()
-
-            // Add fetched Pokemon details to the list
             pokemonModels.addAll(pokemonDetails)
-
             val pokemonListModel = PokemonListModel(pokemonModels, pokemonsDto.count)
+
             emit(Resource.Success(pokemonListModel))
         } catch (e: Exception) {
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))

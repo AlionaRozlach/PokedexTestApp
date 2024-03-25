@@ -1,7 +1,5 @@
 package com.example.pokedextestapp.presentation.pokemons_list.components
 
-import android.graphics.drawable.BitmapDrawable
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,14 +22,16 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -41,24 +41,12 @@ import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintLayoutScope
 import androidx.constraintlayout.compose.Dimension
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
-import com.example.pokedextestapp.R
-import com.example.pokedextestapp.domain.model.PokemonModel
-import com.example.pokedextestapp.presentation.pokemons_list.PokemonsListViewModel
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.capitalize
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.example.pokedextestapp.R
+import com.example.pokedextestapp.domain.model.PokemonModel
+import com.example.pokedextestapp.presentation.pokemons_list.PokemonsListViewModel
 import java.util.Locale
 
 @Composable
@@ -97,9 +85,9 @@ fun CardContent(
             .build(),
         onSuccess = { success ->
             val drawable = success.result.drawable
-            viewModel.calcDominantColor(drawable){ color ->
-                    dominantColor.value = color
-                }
+            viewModel.calcDominantColor(drawable) { color ->
+                dominantColor.value = color
+            }
             println("Image loaded successfully: $dominantColor")
         },
         onLoading = {
@@ -123,7 +111,8 @@ fun CardContent(
                             pokemonNumber,
                             typeList,
                             remoteImageUrl,
-                            dominantColor.value)
+                            dominantColor.value
+                        )
                     )
                 }
         )
@@ -218,7 +207,8 @@ fun PokemonInfo(pokemonName: String, listOfTypes: List<String>, modifier: Modifi
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth().padding(bottom = 5.dp),
+                .fillMaxWidth()
+                .padding(bottom = 5.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(

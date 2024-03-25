@@ -14,19 +14,19 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pokedextestapp.R
 import com.example.pokedextestapp.domain.model.PokemonModel
 import com.example.pokedextestapp.presentation.destinations.PokemonDetailScreenDestination
@@ -45,9 +45,7 @@ fun PokemonsListScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         CustomBackgroundColumn()
 
-        // Layer your content on top of the background
         Column(modifier = Modifier.fillMaxSize()) {
-
             Text(
                 text = "Pokedex",
                 fontSize = 30.sp,
@@ -61,7 +59,7 @@ fun PokemonsListScreen(
                         navigator.navigate(
                             PokemonDetailScreenDestination(
                                 name = pokemon.pokemonName,
-                                pokemon.dominantColor?.red ?:Color.Gray.red,
+                                pokemon.dominantColor?.red ?: Color.Gray.red,
                                 pokemon.dominantColor?.blue ?: Color.Gray.blue,
                                 pokemon.dominantColor?.green ?: Color.Gray.green,
                             )
@@ -69,7 +67,6 @@ fun PokemonsListScreen(
                     }
                 )
             }
-
             // Error message if there's an error
             if (state.error.isNotBlank()) {
                 Text(
@@ -81,7 +78,6 @@ fun PokemonsListScreen(
                         .align(Alignment.CenterHorizontally)
                 )
             }
-
             // Loading indicator
             if (state.isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))

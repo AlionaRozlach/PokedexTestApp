@@ -1,19 +1,11 @@
 package com.example.pokedextestapp.presentation.pokemon_info
 
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.palette.graphics.Palette
 import com.example.pokedextestapp.domain.model.PokemonModel
 import com.example.pokedextestapp.domain.use_case.get_pokemon.GetPokemonDetailUseCase
-import com.example.pokedextestapp.domain.use_case.get_pokemons.GetPokemonsUseCase
-import com.example.pokedextestapp.presentation.pokemons_list.PokemonsListState
-import com.example.pokedextestapp.util.Constants
 import com.example.pokedextestapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,7 +37,8 @@ class PokemonDetailViewModel @Inject constructor(
 
     fun getPokemonDetail(name: String) {
         getPokemonDetailUseCase(
-            name).onEach { result ->
+            name
+        ).onEach { result ->
             when (result) {
                 is Resource.Success -> {
                     _state.value =
@@ -73,7 +66,7 @@ class PokemonDetailViewModel @Inject constructor(
     }
 
     fun convertWeightToPounds(weightInHectograms: Int): String {
-        return String.format("%.1f",weightInHectograms.toDouble() * 0.220462)
+        return String.format("%.1f", weightInHectograms.toDouble() * 0.220462)
     }
 
     fun formatHeight(heightCm: Int): String {

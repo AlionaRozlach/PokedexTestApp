@@ -1,13 +1,10 @@
 package com.example.pokedextestapp.data.repository
 
-import com.example.pokedextestapp.data.remote.model.PokemonDetailDto
-import com.example.pokedextestapp.data.remote.model.PokemonDto
-import entity.pokemon.Pokemon
+import PokeApi
 import com.example.pokedextestapp.data.remote.responses.PokemonList
-import com.example.pokedextestapp.domain.repository.PokemonRepository
 import com.example.pokedextestapp.data.remote.responses.Result
-import entity.common.NamedApiResources
-import entity.pokemon.PokemonSpecies
+import com.example.pokedextestapp.domain.repository.PokemonRepository
+import entity.pokemon.Pokemon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -33,12 +30,6 @@ class PokemonRepositoryImpl : PokemonRepository {
     override suspend fun getPokemonDetails(name: String): entity.pokemon.Pokemon {
         return withContext(Dispatchers.IO) {
             PokeApi.get<Pokemon>(name)
-        }
-    }
-
-    override suspend fun getPokemonSpecies(name: String): entity.pokemon.PokemonSpecies {
-        return withContext(Dispatchers.IO) {
-            PokeApi.get<PokemonSpecies>(name)
         }
     }
 }
