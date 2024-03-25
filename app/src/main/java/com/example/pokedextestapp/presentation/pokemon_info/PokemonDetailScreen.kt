@@ -35,7 +35,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
@@ -55,7 +54,7 @@ fun PokemonDetailScreen(
     navigator: DestinationsNavigator,
     viewModel: PokemonDetailViewModel = hiltViewModel(),
     red: Float, blue: Float, green: Float
-    ) {
+) {
 
     val state by viewModel.state.collectAsState()
 
@@ -89,7 +88,8 @@ fun PokemonDetailContent(
     modifier: Modifier,
     pokemon: PokemonDetailModel,
     navigator: DestinationsNavigator,
-    red: Float, blue: Float, green: Float) {
+    red: Float, blue: Float, green: Float
+) {
     Box(
         modifier = modifier.fillMaxSize()
     ) {
@@ -102,7 +102,7 @@ fun PokemonDetailContent(
         CardWithPokemonInfo(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 100.dp), pokemon = pokemon, red, blue,green
+                .padding(top = 100.dp), pokemon = pokemon, red, blue, green
         )
     }
 }
@@ -165,7 +165,7 @@ fun DetailScreenBg(
                     .padding(bottom = 70.dp),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
-                fontSize = 22.sp,
+                fontSize = 25.sp,
                 color = Color.White
             )
 
@@ -191,7 +191,13 @@ fun DetailScreenBg(
 }
 
 @Composable
-fun CardWithPokemonInfo(modifier: Modifier, pokemon: PokemonDetailModel, red: Float, blue: Float, green: Float) {
+fun CardWithPokemonInfo(
+    modifier: Modifier,
+    pokemon: PokemonDetailModel,
+    red: Float,
+    blue: Float,
+    green: Float
+) {
     val scrollState = rememberScrollState()
     Card(
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -211,7 +217,7 @@ fun CardWithPokemonInfo(modifier: Modifier, pokemon: PokemonDetailModel, red: Fl
             DescriptionTextSection(desc, size, pokemon.description)
             SizeSection(size, desc, info, pokemon.height, pokemon.weight)
             InfoSection(info, size, type, pokemon.baseExep, pokemon.formCounts, pokemon.species)
-            TypeSection(type, info, pokemon.types, red, blue,green)
+            TypeSection(type, info, pokemon.types, red, blue, green)
         }
     }
 }
@@ -224,7 +230,7 @@ fun ConstraintLayoutScope.DescriptionTextSection(
 ) {
     Text(
         text = pokemonDescription,
-        fontSize = 14.sp,
+        fontSize = 18.sp,
         color = Color(48, 57, 67),
         overflow = TextOverflow.Ellipsis,
         textAlign = TextAlign.Start,
@@ -281,7 +287,7 @@ fun ConstraintLayoutScope.InfoSection(
 fun InfoTitle() {
     Text(
         text = "Info",
-        fontSize = 16.sp,
+        fontSize = 20.sp,
         color = Color(48, 57, 67),
         fontWeight = FontWeight.Bold,
         overflow = TextOverflow.Ellipsis,
@@ -297,7 +303,7 @@ fun InfoTitle() {
 fun TypeTitle() {
     Text(
         text = "Type",
-        fontSize = 16.sp,
+        fontSize = 20.sp,
         color = Color(48, 57, 67),
         fontWeight = FontWeight.Bold,
         overflow = TextOverflow.Ellipsis,
@@ -345,7 +351,7 @@ fun InfoDetail(
                 text = "Base exp",
                 fontWeight = FontWeight.Bold,
                 color = Color(48, 57, 67),
-                fontSize = 14.sp,
+                fontSize = 18.sp,
                 textAlign = TextAlign.Start
             )
             Text(
@@ -353,7 +359,7 @@ fun InfoDetail(
                 text = "Species",
                 fontWeight = FontWeight.Bold,
                 color = Color(48, 57, 67),
-                fontSize = 14.sp,
+                fontSize = 18.sp,
                 textAlign = TextAlign.Start
             )
             Text(
@@ -361,24 +367,24 @@ fun InfoDetail(
                 text = "Forms count",
                 fontWeight = FontWeight.Bold,
                 color = Color(48, 57, 67),
-                fontSize = 14.sp,
+                fontSize = 18.sp,
                 textAlign = TextAlign.Start
             )
         }
         Column(modifier = Modifier.padding(start = 20.dp)) {
             Text(
-                text = exp.toString() + "exp",
-                textAlign = TextAlign.End
+                text = "$exp exp",
+                textAlign = TextAlign.End, fontSize = 18.sp
             )
             Text(
                 modifier = Modifier.padding(top = 8.dp),
                 text = species,
-                textAlign = TextAlign.End
+                textAlign = TextAlign.End, fontSize = 18.sp
             )
             Text(
                 modifier = Modifier.padding(top = 8.dp),
                 text = formCounts.toString(),
-                textAlign = TextAlign.End
+                textAlign = TextAlign.End, fontSize = 18.sp
             )
         }
     }
@@ -398,7 +404,7 @@ fun ConstraintLayoutScope.SizeSection(
     val weightLbs = viewModel.convertWeightToPounds(weight)
 
     val formatWeight = "$weightLbs lbs ($weightKg kg)"
-    val formatHeight = viewModel.formatHeight(heightCm = heightCm.toDouble())
+    val formatHeight = viewModel.formatHeight(heightCm = heightCm)
 
     Card(
         modifier = Modifier
@@ -420,14 +426,14 @@ fun ConstraintLayoutScope.SizeSection(
             Column(modifier = Modifier.wrapContentSize()) {
                 Text(
                     text = "Height",
-                    fontSize = 14.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(217, 217, 217),
                     textAlign = TextAlign.Start
                 )
                 Text(
                     text = formatHeight,
-                    fontSize = 14.sp,
+                    fontSize = 18.sp,
                     color = Color.Black,
                     textAlign = TextAlign.Start
                 )
@@ -435,14 +441,14 @@ fun ConstraintLayoutScope.SizeSection(
             Column {
                 Text(
                     text = "Weight",
-                    fontSize = 14.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(217, 217, 217),
                     textAlign = TextAlign.Start
                 )
                 Text(
                     text = formatWeight,
-                    fontSize = 14.sp,
+                    fontSize = 18.sp,
                     color = Color.Black,
                     textAlign = TextAlign.Start
                 )

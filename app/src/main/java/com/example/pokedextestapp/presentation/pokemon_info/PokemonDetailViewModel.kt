@@ -76,14 +76,10 @@ class PokemonDetailViewModel @Inject constructor(
         return String.format("%.1f",weightInHectograms.toDouble() * 0.220462)
     }
 
-    fun formatHeight(heightCm: Double): String {
-        val totalInches = heightCm / 2.54 // Convert centimeters to inches
-        val feet = (totalInches / 12).toInt() // Extract the feet part
-        val inches = (totalInches % 12).toInt() // Extract the inches part
-        val remainingInches =
-            totalInches - feet * 12 - inches // Get the remaining inches as a fraction
-        val roundedInches =
-            String.format("%.1f", remainingInches) // Round remaining inches to 1 decimal place
-        return "${feet}'${roundedInches}\" (${String.format("%.1f", heightCm)} cm)"
+    fun formatHeight(heightCm: Int): String {
+        val inchesTotal = heightCm.toDouble() * 0.393701
+        val feet = (inchesTotal / 12).toInt()
+        val remainingInches = inchesTotal % 12
+        return String.format("%d'%.1f\" (%d cm)", feet, remainingInches, heightCm)
     }
 }
