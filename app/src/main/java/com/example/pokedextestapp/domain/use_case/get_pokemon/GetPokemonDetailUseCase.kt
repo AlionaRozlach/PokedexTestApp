@@ -15,6 +15,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
+import java.util.Locale
 import javax.inject.Inject
 
 class GetPokemonDetailUseCase @Inject constructor(
@@ -28,15 +29,23 @@ class GetPokemonDetailUseCase @Inject constructor(
 
             val pokemonDetailModel =
                 PokemonDetailModel(
-                    id = pokemonEntity.id.toInt(),
-                    name = pokemonEntity.name.capitalize(),
-                    height = pokemonEntity.height.toInt(),
-                    weight = pokemonEntity.weight.toInt(),
-                    baseExep = pokemonEntity.base_experience ?: 0,
+                    id = pokemonEntity.id,
+                    name = pokemonEntity.name.replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            Locale.getDefault()
+                        ) else it.toString()
+                    },
+                    height = pokemonEntity.height,
+                    weight = pokemonEntity.weight,
+                    baseExep = pokemonEntity.base_experience,
                     formCounts = pokemonEntity.forms.size,
-                    species = pokemonSpecies.egg_groups.joinToString(", ") { it.name.capitalize() },
-                    types = pokemonEntity.types.map { it.type.name.capitalize()},
-                    description = flavorTextEntriesInEnglish.flavor_text ?: "Description is not available."
+                    species = pokemonSpecies.egg_groups.joinToString(", ") { it.name.replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            Locale.ROOT
+                        ) else it.toString()
+                    } },
+                    types = pokemonEntity.types.map { it.type.name.capitalize(Locale.ROOT)},
+                    description = flavorTextEntriesInEnglish.flavor_text
                 )
             emit(Resource.Success(pokemonDetailModel))
         } catch (e: Exception) {
@@ -44,11 +53,6 @@ class GetPokemonDetailUseCase @Inject constructor(
         } catch (e: IOException) {
             emit(Resource.Error("Couldn't make API call. Check your internet connection."))
         }
-    }
-
-    // Helper function to get the value of a specific stat for a Pokemon
-    private fun getPokemonStatValue(pokemon: entity.pokemon.Pokemon, statName: String): Int {
-        return pokemon.stats.firstOrNull { it.stat.name == statName }?.baseStat?.toInt() ?: 0
     }
 }
 

@@ -51,12 +51,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.capitalize
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import java.util.Locale
 
 @Composable
 fun PokemonListCard(
@@ -175,10 +178,11 @@ fun ConstraintLayoutScope.PokemonIDSection(
     pokemonNumber: Int
 ) {
     Text(
-        text = pokemonNumber.toString(),
+        text = "#$pokemonNumber",
         fontSize = 20.sp,
-        color = Color.Black,
+        color = Color.Black.copy(0.2f),
         maxLines = 3,
+        fontWeight = FontWeight.Bold,
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier.constrainAs(titleConst) {
             top.linkTo(parent.top, margin = 8.dp)
@@ -210,15 +214,15 @@ fun ConstraintLayoutScope.PokemonInfoSection(
 @Composable
 fun PokemonInfo(pokemonName: String, listOfTypes: List<String>, modifier: Modifier) {
     Column(
-        modifier = modifier
+        modifier = modifier.padding(start = 3.dp)
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth().padding(bottom = 5.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = pokemonName,
+                text = pokemonName.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
@@ -251,14 +255,14 @@ fun Content(modifier: Modifier, url: String) {
             modifier = Modifier
                 .size(95.dp)
                 .align(Alignment.BottomEnd)
-                .offset(5.dp, 10.dp)
+                .offset(5.dp, 10.dp), colorFilter = ColorFilter.tint(Color.White)
         )
         Box(
             modifier = Modifier
                 .wrapContentSize(), contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = rememberImagePainter(url),
+                painter = rememberAsyncImagePainter(url),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
